@@ -24,7 +24,7 @@ const com  = {
 
 const balle = {
     x : canvas.width/2,
-    y: canvas.height/2,
+    y : canvas.height/2,
     radius : 10,
     speed : 5,
     velocityX : 5,
@@ -40,16 +40,18 @@ function dessRect(x,y,w,h,color){
 }
 // creation du filet
 const filet = {
-    x : canvas.width - 1,
+    x : canvas.width/2 - 1,
     y : 0,
     width : 2,
-    height: 10,
-    color: "white"
+    height : 10,
+    color : "white"
 }
 //dessin du filet
 function dessFilet(){
-    for(let i = 0;i <= canvas.height;i+=15){
-        dessRect(filet.x,filet.y + 1,filet.width,filet.height,filet.color);
+     console.log(canvas.height);
+    for(let i = 0; i <= canvas.height; i+=15){
+        dessRect(filet.x, filet.y + i, filet.width, filet.height, filet.color);
+      
     }
 
 }
@@ -92,8 +94,9 @@ function engagement(){
 function jeu(){
     engagement();
 }
+jeu();
 //affichage mouvement
-const imageParSeconde = 50;
+/*const imageParSeconde = 50;
 setInterval(jeu,1000/imageParSeconde);
-
+*/
 
