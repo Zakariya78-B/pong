@@ -74,6 +74,7 @@ function dessTexte(text,x,y,color){
     context.font = "45px fantasy";
     context.fillText(text,x,y);
 }
+
 // fonction engagement
 
 function engagement(){
@@ -90,13 +91,51 @@ function engagement(){
     dessCercle(balle.x,balle.y,balle.radius,balle.color);
 
 }
+//controle plateforme (raquette)
+canvas.addEventListener("mousemove",movePaddle);
+function movePaddle(evt){
+    let rect = canvas.getBoundingClientRect();
+    zak.y = evt.clientY - rect.top - zak.height/2;
+}
+//detection de collision
+function collision(b,p){
+    b.top = b.y - b.radius;
+    b.bottom = b.y + b.radius;
+    b.left = b.x - b.radius;
+    b.right = b.x + b.radius;
+
+    p.top = p.y;
+    p.bottom = p.y + p.height;
+    p.left = p.x;
+    p.right = p.x + p.width;
+
+    return b.right > p.left && b.bottom > p.top && b.left < p.right && b.top < p.bottom;
+
+
+}
+//mise à jour
+function maj(){
+    balle.x += balle.velocityX;
+    balle.y += balle.velocityY;
+
+    if(balle.y + balle.radius > canvas.height || balle.y - balle.radius < 0 ){
+        balle.velocityY = -balle.velocityY;
+    }
+    let joueur = (balle.x < canvas.width/2) ? zak : com;
+
+    if(collision(balle,joueur)){
+
+    }
+}
 //initialisation du jeu
 function jeu(){
+    maj();
     engagement();
+  
 }
 jeu();
 //affichage mouvement
-/*const imageParSeconde = 50;
+const imageParSeconde = 50;
 setInterval(jeu,1000/imageParSeconde);
-*/
+
 
