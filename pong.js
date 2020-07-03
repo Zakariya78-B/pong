@@ -113,18 +113,60 @@ function collision(b,p){
 
 
 }
+//remise en jeu apres point marquer
+function resetBall(){
+    balle.x = canvas.width/2;
+    balle.y = canvas.height/2;
+
+    balle.speed = 0.1;
+    balle.velocityX = -balle.velocityX;
+
+}
 //mise à jour
 function maj(){
     balle.x += balle.velocityX;
     balle.y += balle.velocityY;
+
+    // simple IA pour l'ordinateur
+    let computerLevel = 0.3;
+    com.y += (balle.y -(com.y + com.height/2)) * computerLevel;
 
     if(balle.y + balle.radius > canvas.height || balle.y - balle.radius < 0 ){
         balle.velocityY = -balle.velocityY;
     }
     let joueur = (balle.x < canvas.width/2) ? zak : com;
 
-    if(collision(balle,joueur)){
 
+    if(collision(balle,joueur)){
+        //quandla balle frappe la raquette du joueur
+        let pointImpact = balle.y - (joueur.y + joueur.height/2);
+        // normalisation
+        pointImpact = pointImpact/(joueur.height/2);
+        //calcul de l'angle en radian
+
+        let anglerad = pointImpact * Math.PI/4;
+        let z= anglerad;
+        //x direction de la balle frapper
+        let direction = (balle.x < canvas.width/2) ? 1 : -1;
+
+        // change la velo et Y
+        balle.velocityX = direction * balle.speed * Math.cos(z);
+        balle.velocityY = direction * balle.speed * Math.sin(z);
+
+        //la raquette de l'ordi tape la balle tout le temps
+        balle.speed += 5;
+
+    }
+    // mise a jour du score
+    if(balle.x - balle.radius < 0){
+        //l'ordinateur marque
+        com.score++;
+        resetBall()
+
+    }else if(balle.x + balle.radius > canvas.width){
+        // le joueur gagne
+        zak.score++;
+        resetBall()
     }
 }
 //initialisation du jeu
