@@ -6,7 +6,7 @@ const zak = {
     y : canvas.height/2 - 100/2,
     width : 10,
     height : 100,
-    color : "white",
+    color : "red",
     score : 0
     
 }
@@ -16,7 +16,7 @@ const com  = {
     y : canvas.height/2 - 100/2,
     width : 10,
     height : 100,
-    color : "white",
+    color : "red",
     score : 0
     
 }
@@ -27,8 +27,8 @@ const balle = {
     y : canvas.height/2,
     radius : 10,
     speed : 5,
-    velocityX : 5,
-    velocityY :5,
+    velocityX :3,
+    velocityY :3,
     color : "white"
 
 }
@@ -48,7 +48,7 @@ const filet = {
 }
 //dessin du filet
 function dessFilet(){
-     console.log(canvas.height);
+   
     for(let i = 0; i <= canvas.height; i+=15){
         dessRect(filet.x, filet.y + i, filet.width, filet.height, filet.color);
       
@@ -93,6 +93,7 @@ function engagement(){
 }
 //controle plateforme (raquette)
 canvas.addEventListener("mousemove",movePaddle);
+
 function movePaddle(evt){
     let rect = canvas.getBoundingClientRect();
     zak.y = evt.clientY - rect.top - zak.height/2;
@@ -118,8 +119,9 @@ function resetBall(){
     balle.x = canvas.width/2;
     balle.y = canvas.height/2;
 
-    balle.speed = 0.1;
+    balle.speed = 5;
     balle.velocityX = -balle.velocityX;
+
 
 }
 //mise à jour
@@ -128,7 +130,7 @@ function maj(){
     balle.y += balle.velocityY;
 
     // simple IA pour l'ordinateur
-    let computerLevel = 0.3;
+    let computerLevel = 0.1;
     com.y += (balle.y -(com.y + com.height/2)) * computerLevel;
 
     if(balle.y + balle.radius > canvas.height || balle.y - balle.radius < 0 ){
@@ -145,16 +147,20 @@ function maj(){
         //calcul de l'angle en radian
 
         let anglerad = pointImpact * Math.PI/4;
-        let z= anglerad;
-        //x direction de la balle frapper
+       
+        //direction de la balle frapper va vers x
         let direction = (balle.x < canvas.width/2) ? 1 : -1;
 
-        // change la velo et Y
-        balle.velocityX = direction * balle.speed * Math.cos(z);
-        balle.velocityY = direction * balle.speed * Math.sin(z);
+        // change l'accelaration x et Y
+        balle.velocityX = direction * balle.speed * Math.cos(anglerad);
+        balle.velocityY = direction * balle.speed * Math.sin(anglerad);
 
-        //la raquette de l'ordi tape la balle tout le temps
-        balle.speed += 5;
+        //la raquette de l'ordi tape la balle tout le temps et rajoute de la vitesse à la balle
+        if(balle.speed<50){
+            balle.speed += 0.3;
+        }
+      
+        console.log(balle.speed);
 
     }
     // mise a jour du score
@@ -179,5 +185,6 @@ jeu();
 //affichage mouvement
 const imageParSeconde = 50;
 setInterval(jeu,1000/imageParSeconde);
+
 
 
